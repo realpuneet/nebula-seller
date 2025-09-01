@@ -12,5 +12,10 @@ app.use(morgan("dev"));
 
 app.use("/api/auth", authRouter);
 app.use("/products", productRouter);
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ message: 'Internal Server Error' });
+});
+
 
 module.exports = app;
