@@ -46,10 +46,10 @@ const registerUser = async (req, res) => {
 
 async function loginUser(req, res) {
   const { username, email, password } = req.body;
-  
+
   const user = await userModel.findOne({
-      $or: [{ username }, { email }],
-    });
+    $or: [{ username }, { email }],
+  });
 
   if (!user) {
     return res.status(400).json({
@@ -80,7 +80,93 @@ async function loginUser(req, res) {
   });
 }
 
+async function registerSeller(req, res) {
+  const {
+    username,
+    email,
+    fullname: { firstName, lastName },
+    password,
+  } = req.body;
+
+  const isSellerAlreadyExists = await userModel.findOne({
+    $or: [{ username }, { email }],
+  });
+
+  if (isSellerAlreadyExists) {
+    return res.status(422).json({
+      message:
+        isSellerAlreadyExists === username
+          ? "username already exist!"
+          : "email already exists",
+    });
+  }
+
+  const hashPassword = await bcrypt.hash(password, 10);
+
+  const seller = await userModel.create({
+    username,
+    email,
+    fullname: {
+      firstName,
+      lastName,
+    },
+    password: hashPassword,
+    role: "seller",
+  });
+
+  const token = jwt.sign({ id: seller._id }, process.env.JWT_SECRET);
+
+  res.cookie("token", token);
+
+  res.status(201).json({
+    message: "Seller registered successfully!",
+    seller: {
+      id: seller._id,
+      username: seller.username,
+      email: seller.email,
+      fullname: seller.fullname,
+    },
+  });
+}
+
+async function loginSeller(req, res) {
+  const { username, email, password } = req.body;
+
+  const seller = await userModel.findOne({
+    $or: [{ username }, { email }],
+  });
+
+  if (!seller) {
+    return res.status(400).json({
+      msg: "Invalid Credentials",
+    });
+  }
+
+  const isPasswordValid = await bcrypt.compare(password, seller.password);
+
+  if (!isPasswordValid) {
+    return res.status(400).json({
+      msg: "Invalid Credentials",
+    });
+  }
+
+  const token = jwt.sign({ id: seller._id }, process.env.JWT_SECRET);
+  res.cookie("token", token);
+
+  res.status(200).json({
+    msg: "Seller Logged In Successfully",
+    seller: {
+      id: seller._id,
+      username: seller.username,
+      email: seller.email,
+      fullname: seller.fullname,
+    },
+  });
+}
+
 module.exports = {
   registerUser,
   loginUser,
+  registerSeller,
+  loginSeller,
 };
