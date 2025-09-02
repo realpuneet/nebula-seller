@@ -13,7 +13,7 @@ const authSeller = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    const user = await userModel.findOne(decoded.id);
+    const user = await userModel.findById(decoded.id);
 
     if (user.role !== "seller") {
       return res.status(403).json({
