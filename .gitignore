@@ -1,3 +1,13 @@
 node_modules/
 .env
 
+src/app.js
+src/config/db.js
+src/controllers/auth.controller.js
+src/controllers/product.controller.js
+src/middlewares/auth.middleware.js
+src/models/product.model.js
+src/models/user.model.js
+src/routes/auth.routes.js
+src/routes/product.routes.js
+src/services/storage.service.js
