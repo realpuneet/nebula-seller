@@ -164,6 +164,8 @@ async function loginSeller(req, res) {
   });
 }
 
+
+
 module.exports = {
   registerUser,
   loginUser,

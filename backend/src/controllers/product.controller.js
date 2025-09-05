@@ -45,7 +45,7 @@ async function getSellerProducts(req, res) {
 }
 
 async function getAllProducts(req, res) {
-  const products = await productModel.find().populate("seller");
+  const products = await productModel?.find().populate("seller");
 
   res.status(200).json({
     message: "All products fetched",
