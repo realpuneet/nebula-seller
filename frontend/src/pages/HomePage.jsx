@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import { axiosInstance } from "../config/axiosInstance";
 
@@ -6,7 +6,7 @@ const HomePage = () => {
   const [product, setProduct] = useState([]);
 
   const fetchAllProducts = async () => {
-        try {
+    try {
       const response = await axiosInstance.get("/products/all-products");
       setProduct(response.data.products);
       console.log(response.data.products);
@@ -18,11 +18,18 @@ const HomePage = () => {
   useEffect(() => {
     fetchAllProducts();
   }, []);
-  
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6">
       {product.map((product) => (
-        <ProductCard key={product._id} product={product} />
+        <ProductCard key={product._id}
+        id={product._id}
+        title={product.title}
+        images={product.images}
+        description={product.description}
+        price={product.price}
+        stock={product.stock}
+        />
       ))}
     </div>
   );
