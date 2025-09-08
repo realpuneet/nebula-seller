@@ -2,9 +2,12 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { axiosInstance } from "../config/axiosInstance";
+import { useDispatch } from "react-redux";
+import { setUser } from "../store/features/authSlice";
 
 const LoginForm = ({ setflag }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -12,9 +15,12 @@ const LoginForm = ({ setflag }) => {
   } = useForm();
   const onSubmit = async (data) => {
     try {
-      const response = await axiosInstance.post("/auth/user/login", data);
+      const response = await axiosInstance.post("/auth/user/login", data,{
+        withCredentials: true,
+      });
+      dispatch(setUser(response.data.user));
       console.log(response.data);
-      navigate("/cart");
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
@@ -30,19 +36,19 @@ const LoginForm = ({ setflag }) => {
           <div>
             <label
               className="block text-sm font-medium text-gray-700"
-              htmlFor="email"
+              htmlFor="username"
             >
-              Email
+              Username
             </label>
             <input
-              id="email"
-              type="email"
+              id="username"
+              type="text"
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              {...register("email", { required: "Email is required" })}
+              {...register("username", { required: "Username is required" })}
             />
-            {errors.email && (
+            {errors.username && (
               <p className="text-red-500 text-xs mt-1">
-                {errors.email.message}
+                {errors.username.message}
               </p>
             )}
           </div>
@@ -78,7 +84,7 @@ const LoginForm = ({ setflag }) => {
             onClick={() => setflag((prev) => !prev)}
             className="font-semibold text-blue-600 hover:underline"
           >
-            register here
+            Register
           </button>
         </div>
       </div>
