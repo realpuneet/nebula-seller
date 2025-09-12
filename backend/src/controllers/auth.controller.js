@@ -164,11 +164,23 @@ async function loginSeller(req, res) {
   });
 }
 
-
+async function logoutUser(req, res) {
+  try {
+    res.clearCookie("token");
+    res.status(200).json({
+      message: "User logged out successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+}
 
 module.exports = {
   registerUser,
   loginUser,
   registerSeller,
   loginSeller,
+  logoutUser,
 };
