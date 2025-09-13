@@ -76,6 +76,7 @@ async function loginUser(req, res) {
       username: user.username,
       email: user.email,
       fullname: user.fullname,
+      role: user.role,
     },
   });
 }
@@ -160,6 +161,7 @@ async function loginSeller(req, res) {
       username: seller.username,
       email: seller.email,
       fullname: seller.fullname,
+      role: seller.role,
     },
   });
 }

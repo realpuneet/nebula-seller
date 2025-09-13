@@ -34,7 +34,11 @@ const LoginForm = ({ setflag }) => {
       dispatch(setUser(response.data.user));
       console.log(response.data);
       toast.success("Login successful! Welcome back!");
-      navigate("/");
+      if (response.data.user.role === "seller") {
+        navigate("/seller");
+      } else {
+        navigate("/");
+      }
     } catch (error) {
       console.log(error);
       toast.error("Login failed! Please check your credentials.");

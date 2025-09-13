@@ -93,7 +93,7 @@ const ProductDetail = () => {
                 <img
                   src={product.images[selectedImage]}
                   alt={product.title}
-                  className="w-full h-full object-cover hover:scale-105 transition-transform"
+                  className="w-full h-full object-cover transition-transform"
                 />
               </div>
               {product.images.length > 1 && (
