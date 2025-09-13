@@ -99,7 +99,7 @@ const RegisterForm = ({ setflag }) => {
             </div>
             
             <h1 className="text-6xl font-black mb-6 text-white drop-shadow-lg">
-              Join Cart<span className="text-pink-300">ify</span>
+              Join Cric<span className="text-pink-300">Cart</span>
             </h1>
             <p className="text-xl font-medium text-purple-100 leading-relaxed max-w-md mx-auto">
               Create your account and unlock amazing deals from thousands of trusted sellers worldwide.
@@ -143,7 +143,7 @@ const RegisterForm = ({ setflag }) => {
               </svg>
             </div>
             <h2 className="text-4xl font-black text-slate-800">
-              Join Cart<span className="text-purple-600">ify</span>
+              Join Cric<span className="text-purple-600">Cart</span>
             </h2>
           </div>
 

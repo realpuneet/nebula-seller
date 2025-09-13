@@ -69,7 +69,7 @@ const LoginForm = ({ setflag }) => {
             </div>
             
             <h1 className="text-6xl font-black mb-6 text-white drop-shadow-lg">
-              Cart<span className="text-pink-300">ify</span>
+              Cric<span className="text-pink-300">Cart</span>
             </h1>
             <p className="text-xl font-medium text-indigo-100 leading-relaxed max-w-md mx-auto">
               Discover amazing products and enjoy seamless shopping experiences with thousands of satisfied customers.
@@ -105,7 +105,7 @@ const LoginForm = ({ setflag }) => {
               </svg>
             </div>
             <h2 className="text-4xl font-black text-slate-800">
-              Cart<span className="text-purple-600">ify</span>
+              Cric<span className="text-purple-600">Cart</span>
             </h2>
           </div>
 

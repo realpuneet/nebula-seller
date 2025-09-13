@@ -74,7 +74,7 @@ const Navbar = () => {
               onClick={() => navigate("/")}
               className="text-xl sm:text-2xl font-bold text-blue-600 cursor-pointer hover:text-blue-700 transition-colors"
             >
-              Cartify
+              CricCart
             </h1>
           </div>
 
