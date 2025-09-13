@@ -27,3 +27,17 @@ export const createProduct = async (data) => {
     console.error("Error in creating products: ", error);
   }
 };
+
+
+export const fetchSellerProducts = async() => {
+  try {
+      const res = await axiosInstance.get("/products/seller-products")
+      console.log(res);
+      if (res) {
+        return res.data.products;
+      }
+         
+  } catch (error) {
+    console.log("Error while seller products fetching: ",error);
+  }
+}

@@ -1,6 +1,13 @@
 const jwt = require("jsonwebtoken");
 const userModel = require("../models/user.model");
 
+// Helper function to sanitize user object by removing password
+const sanitizeUser = (user) => {
+  const safe = user.toObject();
+  delete safe.password;
+  return safe;
+};
+
 const authSeller = async (req, res, next) => {
   const token = req.cookies.token;
 
@@ -21,7 +28,7 @@ const authSeller = async (req, res, next) => {
       });
     }
 
-    req.seller = user;
+    req.seller = sanitizeUser(user);
 
     next();
   } catch (error) {
@@ -45,7 +52,7 @@ const authUser = async (req, res, next) => {
 
     const user = await userModel.findById(decoded.id);
 
-    req.user = user;
+    req.user = sanitizeUser(user);
 
     next();
   } catch (error) {

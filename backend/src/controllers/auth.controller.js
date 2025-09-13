@@ -2,6 +2,13 @@ const userModel = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+// Helper function to sanitize user object by removing password
+const sanitizeUser = (user) => {
+  const safe = user.toObject();
+  delete safe.password;
+  return safe;
+};
+
 const registerUser = async (req, res) => {
   const {
     username,
@@ -71,13 +78,7 @@ async function loginUser(req, res) {
 
   res.status(200).json({
     message: "user logged in successfully",
-    user: {
-      id: user._id,
-      username: user.username,
-      email: user.email,
-      fullname: user.fullname,
-      role: user.role,
-    },
+    user: sanitizeUser(user),
   });
 }
 
@@ -121,12 +122,7 @@ async function registerSeller(req, res) {
 
   res.status(201).json({
     message: "Seller registered successfully!",
-    seller: {
-      id: seller._id,
-      username: seller.username,
-      email: seller.email,
-      fullname: seller.fullname,
-    },
+    seller: sanitizeUser(seller),
   });
 }
 
@@ -156,13 +152,7 @@ async function loginSeller(req, res) {
 
   res.status(200).json({
     msg: "Seller Logged In Successfully",
-    seller: {
-      id: seller._id,
-      username: seller.username,
-      email: seller.email,
-      fullname: seller.fullname,
-      role: seller.role,
-    },
+    seller: sanitizeUser(seller)
   });
 }
 
@@ -198,13 +188,7 @@ async function updateUserRole(req, res) {
 
     res.status(200).json({
       message: "User role updated successfully",
-      user: {
-        id: user._id,
-        username: user.username,
-        email: user.email,
-        role: user.role,
-        fullname: user.fullname,
-      },
+      user: sanitizeUser(user),
     });
   } catch (error) {
     res.status(500).json({

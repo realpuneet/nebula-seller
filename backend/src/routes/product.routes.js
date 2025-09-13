@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.post(
   "/create-product",
-  // authMiddleware.authSeller,
+  authMiddleware.authSeller,
   upload.array("images", 5),
   productController.createProduct
 );

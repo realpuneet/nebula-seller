@@ -25,6 +25,7 @@ const HomePage = () => {
     fetchAllProducts();
   }, []);
 
+  //if products loading show blank product skeleton
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
@@ -59,6 +60,7 @@ const HomePage = () => {
     );
   }
 
+  //if getting error then show error
   if (error) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center">
@@ -127,7 +129,7 @@ const HomePage = () => {
                 key={product._id}
                 id={product._id}
                 title={product.title}
-                images={product.images}
+                images={product.images[0]}
                 description={product.description}
                 price={product.price}
                 stock={product.stock}
@@ -141,6 +143,7 @@ const HomePage = () => {
       </div>
     </div>
   );
+  
 };
 
 export default HomePage;
