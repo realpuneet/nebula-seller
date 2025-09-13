@@ -2,8 +2,9 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { axiosInstance } from "../config/axiosInstance";
 import { useNavigate } from "react-router";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { registerSeller } from "../api/SellerApis";
+import { updateUserRole } from "../store/features/authSlice";
 import { toast } from "react-toastify";
 
 const roleOptions = [
@@ -14,7 +15,8 @@ const roleOptions = [
 const RegisterForm = ({ setflag }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const {user} = useSelector((state)=> state.auth);  
+  const {user, isLoggedIn} = useSelector((state)=> state.auth);
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -39,18 +41,29 @@ const RegisterForm = ({ setflag }) => {
         password: data.password,
         role: data.role,
       };
-      if(data.role === "seller"){
-        const res =await registerSeller(newObj);
-        console.log("seller registered:-> ", res);
-        toast.success("Seller account created successfully!");
-
+      if(isLoggedIn){
+        // For logged-in users, update their role
+        const response = await axiosInstance.put("/auth/user/role", { role: data.role });
+        console.log("role updated:", response.data);
+        dispatch(updateUserRole(data.role));
+        toast.success("Role updated successfully! You are now a seller.");
+        navigate("/seller");
       }else{
-        const response = await axiosInstance.post("/auth/user/register", newObj);
-      console.log(response.data);
-      toast.success("User account created successfully!");
+        // For new users, create account
+        if(data.role === "seller"){
+          const res =await registerSeller(newObj);
+          console.log("seller registered:-> ", res);
+          toast.success("Seller account created successfully!");
+
+        }else{
+          const response = await axiosInstance.post("/auth/user/register", newObj);
+        console.log(response.data);
+        toast.success("User account created successfully!");
+        }
+        reset();
+        navigate("/");
       }
       reset();
-      navigate("/");
     } catch (error) {
       console.log(error);
       toast.error("Registration failed! Please try again.");
@@ -162,11 +175,11 @@ const RegisterForm = ({ setflag }) => {
                       id="username"
                       type="text"
                       defaultValue={user?.username}
-                      disabled={user ? true : false}
-                      className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:bg-white focus:border-purple-500 focus:outline-none transition-all duration-300 text-slate-800 placeholder-slate-400 font-medium text-lg"
+                      disabled={isLoggedIn}
+                      className={`w-full px-5 py-4 ${isLoggedIn ? 'bg-gray-100 border-gray-300' : 'bg-slate-50 border-slate-200'} border-2 rounded-2xl ${!isLoggedIn ? 'focus:bg-white focus:border-purple-500 focus:outline-none' : ''} transition-all duration-300 text-slate-800 placeholder-slate-400 font-medium text-lg`}
                       placeholder="Choose a unique username"
-                      {...register("username", { 
-                        required: "Username is required",
+                      {...register("username", {
+                        required: isLoggedIn ? false : "Username is required",
                         minLength: {
                           value: 3,
                           message: "Username must be at least 3 characters"
@@ -174,7 +187,7 @@ const RegisterForm = ({ setflag }) => {
                       })}
                     />
                     <div className="absolute inset-y-0 right-0 flex items-center pr-5">
-                      <svg className="w-6 h-6 text-slate-400 group-focus-within:text-purple-500 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className={`w-6 h-6 ${isLoggedIn ? 'text-gray-400' : 'text-slate-400 group-focus-within:text-purple-500'} transition-colors duration-200`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                       </svg>
                     </div>
@@ -202,11 +215,11 @@ const RegisterForm = ({ setflag }) => {
                       id="email"
                       type="email"
                       defaultValue={user?.email}
-                      disabled={user ? true : false}
-                      className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:bg-white focus:border-purple-500 focus:outline-none transition-all duration-300 text-slate-800 placeholder-slate-400 font-medium text-lg"
+                      disabled={isLoggedIn}
+                      className={`w-full px-5 py-4 ${isLoggedIn ? 'bg-gray-100 border-gray-300' : 'bg-slate-50 border-slate-200'} border-2 rounded-2xl ${!isLoggedIn ? 'focus:bg-white focus:border-purple-500 focus:outline-none' : ''} transition-all duration-300 text-slate-800 placeholder-slate-400 font-medium text-lg`}
                       placeholder="Enter your email address"
-                      {...register("email", { 
-                        required: "Email is required",
+                      {...register("email", {
+                        required: isLoggedIn ? false : "Email is required",
                         pattern: {
                           value: /^\S+@\S+$/i,
                           message: "Please enter a valid email"
@@ -214,7 +227,7 @@ const RegisterForm = ({ setflag }) => {
                       })}
                     />
                     <div className="absolute inset-y-0 right-0 flex items-center pr-5">
-                      <svg className="w-6 h-6 text-slate-400 group-focus-within:text-purple-500 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className={`w-6 h-6 ${isLoggedIn ? 'text-gray-400' : 'text-slate-400 group-focus-within:text-purple-500'} transition-colors duration-200`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path>
                       </svg>
                     </div>
@@ -242,11 +255,11 @@ const RegisterForm = ({ setflag }) => {
                       id="firstName"
                       type="text"
                       defaultValue={user?.fullname?.firstName}
-                      disabled={user ? true : false}
-                      className="w-full px-4 py-4 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:bg-white focus:border-purple-500 focus:outline-none transition-all duration-300 text-slate-800 placeholder-slate-400 font-medium"
+                      disabled={isLoggedIn}
+                      className={`w-full px-4 py-4 ${isLoggedIn ? 'bg-gray-100 border-gray-300' : 'bg-slate-50 border-slate-200'} border-2 rounded-2xl ${!isLoggedIn ? 'focus:bg-white focus:border-purple-500 focus:outline-none' : ''} transition-all duration-300 text-slate-800 placeholder-slate-400 font-medium`}
                       placeholder="First name"
                       {...register("firstName", {
-                        required: "First name is required",
+                        required: isLoggedIn ? false : "First name is required",
                       })}
                     />
                     {errors.firstName && (
@@ -270,8 +283,8 @@ const RegisterForm = ({ setflag }) => {
                       id="lastName"
                       type="text"
                       defaultValue={user?.fullname?.lastName}
-                      disabled={user ? true : false}
-                      className="w-full px-4 py-4 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:bg-white focus:border-purple-500 focus:outline-none transition-all duration-300 text-slate-800 placeholder-slate-400 font-medium"
+                      disabled={isLoggedIn}
+                      className={`w-full px-4 py-4 ${isLoggedIn ? 'bg-gray-100 border-gray-300' : 'bg-slate-50 border-slate-200'} border-2 rounded-2xl ${!isLoggedIn ? 'focus:bg-white focus:border-purple-500 focus:outline-none' : ''} transition-all duration-300 text-slate-800 placeholder-slate-400 font-medium`}
                       placeholder="Last name"
                       {...register("lastName")}
                     />
@@ -315,7 +328,8 @@ const RegisterForm = ({ setflag }) => {
                   )}
                 </div>
 
-                {/* Password Field */}
+                {/* Password Field - hide for logged-in users */}
+                {!isLoggedIn && (
                 <div className="group">
                   <label
                     className="block text-sm font-bold text-slate-700 mb-3"
@@ -330,7 +344,7 @@ const RegisterForm = ({ setflag }) => {
                       className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:bg-white focus:border-purple-500 focus:outline-none transition-all duration-300 text-slate-800 placeholder-slate-400 font-medium text-lg pr-14"
                       placeholder="Create a strong password"
                       {...register("password", {
-                        required: "Password is required",
+                        required: isLoggedIn ? false : "Password is required",
                         minLength: {
                           value: 8,
                           message: "Password must be at least 8 characters",
@@ -363,6 +377,7 @@ const RegisterForm = ({ setflag }) => {
                     </div>
                   )}
                 </div>
+                )}
               </div>
 
               {/* Submit Button */}
@@ -373,21 +388,21 @@ const RegisterForm = ({ setflag }) => {
               >
                 <span className="flex items-center justify-center">
                   {isLoading ? (
-                    <>
-                      <svg className="animate-spin -ml-1 mr-3 h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Creating Account...
-                    </>
-                  ) : (
-                    <>
-                      Create Account
-                      <svg className="w-6 h-6 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-                      </svg>
-                    </>
-                  )}
+                <>
+                  <svg className="animate-spin -ml-1 mr-3 h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  {isLoggedIn ? "Updating Role..." : "Creating Account..."}
+                </>
+              ) : (
+                <>
+                  {isLoggedIn ? "Update to Seller" : "Create Account"}
+                  <svg className="w-6 h-6 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                  </svg>
+                </>
+              )}
                 </span>
               </button>
             </form>

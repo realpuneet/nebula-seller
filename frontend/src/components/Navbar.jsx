@@ -51,6 +51,19 @@ const Navbar = () => {
     closeMobileMenu();
   };
 
+  const handleBecomeSeller = () => {
+    if (!isLoggedIn) {
+      toast.info("Please login to become a seller");
+      navigate("/auth");
+      closeMobileMenu();
+    } else {
+      // Show registration form for logged-in user to update role
+      navigate("/auth");
+      closeMobileMenu();
+    }
+  };
+
+
   return (
     <nav className="bg-white shadow-lg sticky top-0 w-full z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -115,7 +128,7 @@ const Navbar = () => {
               </button>
             ) : (
               <button
-                onClick={() => navigate("/auth")}
+                onClick={handleBecomeSeller}
                 className="flex items-center px-3 py-2 text-green-600 hover:text-green-700 hover:bg-green-50 rounded-lg font-medium transition-all duration-200"
               >
                 <FiShoppingBag className="w-4 h-4 mr-2" />
@@ -234,10 +247,7 @@ const Navbar = () => {
               </button>
             ) : (
               <button
-                onClick={() => {
-                  navigate("/auth");
-                  closeMobileMenu();
-                }}
+                onClick={handleBecomeSeller}
                 className="w-full flex items-center px-5 py-4 text-left text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-2xl font-semibold transition-all duration-300 border-2 border-emerald-200"
               >
                 <FiShoppingBag className="w-6 h-6 mr-4" />

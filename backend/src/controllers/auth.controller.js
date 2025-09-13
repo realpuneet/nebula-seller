@@ -177,10 +177,45 @@ async function logoutUser(req, res) {
   }
 }
 
+async function updateUserRole(req, res) {
+  try {
+    const { role } = req.body;
+    const userId = req.user._id;
+
+    const user = await userModel.findByIdAndUpdate(
+      userId,
+      { role: role },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      message: "User role updated successfully",
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+        fullname: user.fullname,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Internal Server Error",
+    });
+  }
+}
+
 module.exports = {
   registerUser,
   loginUser,
   registerSeller,
   loginSeller,
   logoutUser,
+  updateUserRole,
 };

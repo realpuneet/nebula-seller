@@ -23,6 +23,7 @@ router.get("/me", authUser,async(req, res)=>{
 router.post("/user/register", authController.registerUser);
 router.post("/user/login", authController.loginUser);
 router.get("/user/logout", authController.logoutUser);
+router.put("/user/role", authUser, authController.updateUserRole);
 
 //seller
 router.post("/seller/register", authController.registerSeller);
