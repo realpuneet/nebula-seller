@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import { axiosInstance } from "../config/axiosInstance";
 import { useDispatch } from "react-redux";
 import { setUser } from "../store/features/authSlice";
+import { toast } from "react-toastify";
 
 const LoginForm = ({ setflag }) => {
   const navigate = useNavigate();
@@ -32,9 +33,11 @@ const LoginForm = ({ setflag }) => {
       });
       dispatch(setUser(response.data.user));
       console.log(response.data);
+      toast.success("Login successful! Welcome back!");
       navigate("/");
     } catch (error) {
       console.log(error);
+      toast.error("Login failed! Please check your credentials.");
     } finally {
       setIsLoading(false);
     }

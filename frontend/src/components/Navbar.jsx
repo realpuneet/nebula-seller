@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router";
 import { removeUser } from "../store/features/authSlice";
 import { axiosInstance } from '../config/axiosInstance';
+import { toast } from "react-toastify";
 import { 
   FiSearch, 
   FiShoppingCart, 
@@ -25,11 +26,13 @@ const Navbar = () => {
     try {
       let res = await axiosInstance.get("/auth/user/logout");
       if (res) {
+        toast.success("Logged out successfully!");
         return res.data.message;
       }
       console.log(res.data.message);
     } catch (error) {
       console.log("error in logout", error);
+      toast.error("Logout failed! Please try again.");
     }
   };
 

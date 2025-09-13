@@ -5,6 +5,7 @@ import AuthPage from "../pages/AuthPage";
 import CartPage from "../pages/CartPage";
 import ProtectedRoute from "./ProtectedRoute";
 import ProductDetail from "../pages/ProductDetail";
+import Seller from "../pages/Seller";
 
 const AuthRoute = () => {
   return (
@@ -20,6 +21,7 @@ const AuthRoute = () => {
           </ProtectedRoute>
         }
       />
+      <Route path="/seller" element={<Seller/>} />
     </Routes>
   );
 };

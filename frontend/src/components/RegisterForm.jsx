@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { axiosInstance } from "../config/axiosInstance";
 import { useNavigate } from "react-router";
+import { useSelector } from "react-redux";
+import { registerSeller } from "../api/SellerApis";
+import { toast } from "react-toastify";
 
 const roleOptions = [
   { value: "user", label: "User" },
@@ -11,7 +14,7 @@ const roleOptions = [
 const RegisterForm = ({ setflag }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
+  const {user} = useSelector((state)=> state.auth);  
   const {
     register,
     handleSubmit,
@@ -20,9 +23,11 @@ const RegisterForm = ({ setflag }) => {
   } = useForm();
 
   const navigate = useNavigate();
+  
 
   const onSubmit = async (data) => {
     setIsLoading(true);
+
     try {
       const newObj = {
         username: data.username,
@@ -34,15 +39,25 @@ const RegisterForm = ({ setflag }) => {
         password: data.password,
         role: data.role,
       };
-      const response = await axiosInstance.post("/auth/user/register", newObj);
+      if(data.role === "seller"){
+        const res =await registerSeller(newObj);
+        console.log("seller registered:-> ", res);
+        toast.success("Seller account created successfully!");
+
+      }else{
+        const response = await axiosInstance.post("/auth/user/register", newObj);
       console.log(response.data);
+      toast.success("User account created successfully!");
+      }
       reset();
       navigate("/");
     } catch (error) {
       console.log(error);
+      toast.error("Registration failed! Please try again.");
     } finally {
       setIsLoading(false);
     }
+
   };
 
   const togglePasswordVisibility = () => {
@@ -146,6 +161,8 @@ const RegisterForm = ({ setflag }) => {
                     <input
                       id="username"
                       type="text"
+                      defaultValue={user?.username}
+                      disabled={user ? true : false}
                       className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:bg-white focus:border-purple-500 focus:outline-none transition-all duration-300 text-slate-800 placeholder-slate-400 font-medium text-lg"
                       placeholder="Choose a unique username"
                       {...register("username", { 
@@ -184,6 +201,8 @@ const RegisterForm = ({ setflag }) => {
                     <input
                       id="email"
                       type="email"
+                      defaultValue={user?.email}
+                      disabled={user ? true : false}
                       className="w-full px-5 py-4 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:bg-white focus:border-purple-500 focus:outline-none transition-all duration-300 text-slate-800 placeholder-slate-400 font-medium text-lg"
                       placeholder="Enter your email address"
                       {...register("email", { 
@@ -222,6 +241,8 @@ const RegisterForm = ({ setflag }) => {
                     <input
                       id="firstName"
                       type="text"
+                      defaultValue={user?.fullname?.firstName}
+                      disabled={user ? true : false}
                       className="w-full px-4 py-4 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:bg-white focus:border-purple-500 focus:outline-none transition-all duration-300 text-slate-800 placeholder-slate-400 font-medium"
                       placeholder="First name"
                       {...register("firstName", {
@@ -248,6 +269,8 @@ const RegisterForm = ({ setflag }) => {
                     <input
                       id="lastName"
                       type="text"
+                      defaultValue={user?.fullname?.lastName}
+                      disabled={user ? true : false}
                       className="w-full px-4 py-4 bg-slate-50 border-2 border-slate-200 rounded-2xl focus:bg-white focus:border-purple-500 focus:outline-none transition-all duration-300 text-slate-800 placeholder-slate-400 font-medium"
                       placeholder="Last name"
                       {...register("lastName")}

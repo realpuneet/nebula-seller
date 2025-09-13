@@ -1,8 +1,9 @@
 import { axiosInstance } from "../config/axiosInstance.jsx";
 
-export const registerSeller = async () => {
+export const registerSeller = async (data) => {
   try {
-    const response = await axiosInstance.post("/auth/seller/register");
+    const response = await axiosInstance.post("/auth/seller/register", data);
+    console.log(response);
     if(response){
         return response.data.seller
     }
