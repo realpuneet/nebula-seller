@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const paymentSchema = new mongoose.Schema({
     product_id:{
-        type: mongoose.Types.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "product",
         required: true,
     },
@@ -21,7 +21,7 @@ const paymentSchema = new mongoose.Schema({
         required: true
     },
     user: {
-        type: mongoose.Types.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'user',
         required: true
     },

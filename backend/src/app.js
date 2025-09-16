@@ -3,8 +3,9 @@ const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 const authRouter = require("./routes/auth.routes");
 const productRouter = require("./routes/product.routes");
-const cors = require("cors");
+const paymentRouter = require("./routes/payment.routes");
 
+const cors = require("cors");
 const app = express();
 
 
@@ -20,6 +21,7 @@ app.use(
 
 app.use("/api/auth", authRouter);
 app.use("/api/products", productRouter);
+app.use("/api/payment", paymentRouter);
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
