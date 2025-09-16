@@ -12,6 +12,9 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import { fetchProductDetail } from "../api/ProductApi";
+import { createOrder } from "../api/PaymentAPI";
+import { axiosInstance } from "../config/axiosInstance";
+import { useSelector } from "react-redux";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -21,6 +24,8 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -45,6 +50,64 @@ const ProductDetail = () => {
   const formatPrice = (price) => {
     if (!price) return "";
     return `${price.currency} ${price.amount.toLocaleString()}`;
+  };
+
+  // for payment handling
+  const handlePayment = async () => {
+    if (!user || !user._id) {
+      alert("You must be logged in to make a payment.");
+      return;
+    }
+    try {
+      const orderData = {
+        amount: product?.price?.amount,
+        currency: product?.price?.currency,
+        product_id: id,
+        user_id: user._id,
+      };
+
+      let res = await createOrder(orderData);
+
+      //creating order id
+      let order_id = res.data.order.order_id;
+
+      if (res) {
+        const options = {
+          key: res.data.razorpay_key,
+          order_id: res.data.order.order_id,
+          name: "CricCart E-comm app",
+          description: "Product purchasing",
+          amount: product?.price?.amount,
+          currency: product?.price?.currency,
+          handler: async (response) => {
+            let dets = {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              order_id: order_id,
+            };
+            let res = await axiosInstance.post("/payment/verify-payment", dets);
+            if (res) {
+              alert("Payment Successfull");
+            } else {
+              alert("Payment Failed");
+            }
+          },
+          prefill: {
+            name: "Puneet",
+            contact: 9399336702,
+            email: "puneet@gmail.com",
+          },
+          theme: {
+            color: "blue",
+          },
+        };
+        const rzps = new window.Razorpay(options);
+        rzps.open();
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   if (loading) {
@@ -108,7 +171,11 @@ const ProductDetail = () => {
                           : "border-gray-200 hover:scale-105"
                       }`}
                     >
-                      <img src={img} alt={product.title} className="w-full h-full object-cover" />
+                      <img
+                        src={img}
+                        alt={product.title}
+                        className="w-full h-full object-cover"
+                      />
                     </button>
                   ))}
                 </div>
@@ -132,7 +199,9 @@ const ProductDetail = () => {
               {/* Stock */}
               <div className="mb-6 text-sm text-gray-700">
                 {product.stock > 0 ? (
-                  <span className="text-green-600">In Stock ({product.stock})</span>
+                  <span className="text-green-600">
+                    In Stock ({product.stock})
+                  </span>
                 ) : (
                   <span className="text-red-600">Out of Stock</span>
                 )}
@@ -140,7 +209,9 @@ const ProductDetail = () => {
 
               {/* Quantity */}
               <div className="mb-8">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Quantity</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Quantity
+                </label>
                 <div className="flex items-center gap-3">
                   <div className="flex items-center border border-gray-300 rounded-lg">
                     <button
@@ -160,7 +231,11 @@ const ProductDetail = () => {
                     </button>
                   </div>
                   <span className="text-sm text-gray-500">
-                    Total: {formatPrice({ ...product.price, amount: product.price.amount * quantity })}
+                    Total:{" "}
+                    {formatPrice({
+                      ...product.price,
+                      amount: product.price.amount * quantity,
+                    })}
                   </span>
                 </div>
               </div>
@@ -178,21 +253,29 @@ const ProductDetail = () => {
                       : "border-gray-300 hover:border-gray-400"
                   }`}
                 >
-                  <Heart className={isWishlisted ? "w-5 h-5 fill-current" : "w-5 h-5"} />
+                  <Heart
+                    className={
+                      isWishlisted ? "w-5 h-5 fill-current" : "w-5 h-5"
+                    }
+                  />
                 </button>
                 <button className="p-3 rounded-xl border border-gray-300 hover:border-gray-400">
                   <Share className="w-5 h-5" />
                 </button>
               </div>
 
-              <button className="w-full bg-gray-900 text-white py-3 rounded-xl font-semibold hover:bg-gray-800">
+              <button
+                onClick={handlePayment}
+                className="w-full bg-gray-900 text-white py-3 rounded-xl font-semibold hover:bg-gray-800"
+              >
                 Buy Now
               </button>
 
               {/* Features */}
               <div className="mt-8 space-y-3 text-sm text-gray-600">
                 <div className="flex items-center gap-2">
-                  <Truck className="w-5 h-5" /> Free delivery on orders above ₹999
+                  <Truck className="w-5 h-5" /> Free delivery on orders above
+                  ₹999
                 </div>
                 <div className="flex items-center gap-2">
                   <RotateCcw className="w-5 h-5" /> 30-day return policy
@@ -204,7 +287,7 @@ const ProductDetail = () => {
             </div>
           </div>
         </div>
-      </div>  
+      </div>
     </div>
   );
 };

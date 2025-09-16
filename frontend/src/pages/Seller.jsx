@@ -25,7 +25,6 @@ const Seller = () => {
        setLoading(true);
        const productsData = await fetchSellerProducts();
        setProducts(productsData || [])
-       console.log("seller page->>>", productsData);
 
      } catch (error) {
        console.log(error);

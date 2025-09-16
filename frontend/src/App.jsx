@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import Navbar from './components/Navbar';
-import AppRoute from './routes/AuthRoute';
+import AppRoute from './routes/AppRoute';
 import { useDispatch } from 'react-redux';
 import { axiosInstance } from './config/axiosInstance';
 import { setUser } from './store/features/authSlice';
@@ -13,7 +13,6 @@ const App = () => {
     (async () => {
       try {
         let me = await axiosInstance.get("/auth/me");
-        console.log(me.data.user);
         if (me) {
           dispatch(setUser(me?.data?.user));
         }

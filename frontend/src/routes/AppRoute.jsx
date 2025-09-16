@@ -6,6 +6,7 @@ import CartPage from "../pages/CartPage";
 import ProtectedRoute from "./ProtectedRoute";
 import ProductDetail from "../pages/ProductDetail";
 import Seller from "../pages/Seller";
+import Wishlist from "../pages/Wishlist";
 
 const AuthRoute = () => {
   return (
@@ -13,6 +14,7 @@ const AuthRoute = () => {
       <Route path="/" element={<HomePage />} />
       <Route path="/auth" element={<AuthPage />} />
       <Route path="/product-detail/:id" element={<ProductDetail />} />
+      <Route path="/wishlist" element={<Wishlist/>} />
       <Route
         path="/cart"
         element={

@@ -12,7 +12,6 @@ const HomePage = () => {
       setLoading(true);
       const response = await axiosInstance.get("/products/all-products");
       setProducts(response.data.products);
-      console.log(response.data.products);
     } catch (error) {
       console.log(error);
       setError("Failed to load products. Please try again.");

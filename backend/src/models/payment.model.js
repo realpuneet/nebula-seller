@@ -27,6 +27,14 @@ const paymentSchema = new mongoose.Schema({
     },
     payment_id: {
         type: String,
+    },
+    // FIXED: Added order_id field to store Razorpay order ID
+    order_id: {
+        type: String,
+        required: true
+    }, 
+    signature: {
+        type: String
     }
 })
 
