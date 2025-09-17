@@ -17,7 +17,7 @@ const App = () => {
           dispatch(setUser(me?.data?.user));
         }
       } catch (error) {
-        console.log("errro in / me router");
+        console.log("errro in /me route /login first");
       }
     })();
   }, []);

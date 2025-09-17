@@ -12,9 +12,15 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan("dev"));
+
+const allowedOrigins = [
+  "http://localhost:5173",           // local frontend
+  "https://nebula-seller.vercel.app" // deployed frontend
+];
+
 app.use(
   cors({
-    origin: "https://nebula-seller.vercel.app",
+    origin: allowedOrigins,
     credentials: true,
   })
 );

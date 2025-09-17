@@ -15,6 +15,7 @@ import { fetchProductDetail } from "../api/ProductApi";
 import { createOrder } from "../api/PaymentAPI";
 import { axiosInstance } from "../config/axiosInstance";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -88,9 +89,9 @@ const ProductDetail = () => {
             };
             let res = await axiosInstance.post("/api/payment/verify-payment", dets);
             if (res) {
-              alert("Payment Successfull");
+              toast.success('Payment Successfull')
             } else {
-              alert("Payment Failed");
+              toast.error('Payment Failed')
             }
           },
           prefill: {

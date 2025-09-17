@@ -3,7 +3,7 @@ import { axiosInstance } from "../config/axiosInstance";
 
 export const fetchProductDetail = async (id) => {
   try {
-    let response = await axiosInstance.get(`/products/product-detail/${id}`);
+    let response = await axiosInstance.get(`/api/products/product-detail/${id}`);
 
     if (response) {
       return response.data.product;
