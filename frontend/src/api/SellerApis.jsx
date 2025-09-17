@@ -11,3 +11,15 @@ export const registerSeller = async (data) => {
     console.log("Error while seller registration: ",error);
   }
 };
+
+export const loginSeller = async (data) => {
+  try {
+    const response = await axiosInstance.post("/api/auth/seller/login", data);
+    console.log(response);
+    if(response){
+        return response.data.seller
+    }
+  } catch (error) {
+    console.log("Error while seller login: ",error);
+  }
+};

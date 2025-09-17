@@ -12,7 +12,7 @@ const App = () => {
   useEffect(() => {
     (async () => {
       try {
-        let me = await axiosInstance.get("/auth/me");
+        let me = await axiosInstance.get("/api/auth/me");
         if (me) {
           dispatch(setUser(me?.data?.user));
         }
