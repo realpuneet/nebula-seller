@@ -6,13 +6,10 @@ const createOrder = async (req, res) => {
   try {
     const { amount, currency, user_id, product_id } = req.body;
 
-    // DEBUG: Log input parameters for order creation
-    console.log("Creating order with:", {
-      amount,
-      currency,
-      user_id,
-      product_id,
-    });
+    // Validate amount is a number
+    if (typeof amount !== 'number' || isNaN(amount)) {
+      return res.status(400).json({ message: "Invalid amount" });
+    }
 
     const options = {
       amount: amount * 100,
@@ -21,8 +18,6 @@ const createOrder = async (req, res) => {
     };
 
     const order = await razorpayInstance.orders.create(options);
-    // DEBUG: Log the created Razorpay order details
-    console.log("Razorpay order created:", order);
 
     if (!order)
       return res.status(400).json({ message: "Order generation failed" });
@@ -34,8 +29,6 @@ const createOrder = async (req, res) => {
       product_id,
       user: user_id,
     });
-    // DEBUG: Log the created payment record to verify order_id is saved
-    console.log("Payment record created:", payment);
 
     return res.status(201).json({
       message: "order created successfully",

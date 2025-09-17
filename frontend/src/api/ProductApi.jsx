@@ -1,4 +1,3 @@
-import axios from "axios";
 import { axiosInstance } from "../config/axiosInstance";
 
 export const fetchProductDetail = async (id) => {
@@ -15,12 +14,14 @@ export const fetchProductDetail = async (id) => {
 
 export const createProduct = async (data) => {
   try {
-    const res = await axiosInstance.post("/products/create-product", data, {
+    console.log("Creating product with data:", data);
+    const res = await axiosInstance.post("/api/products/create-product", data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
-    console.log(res);
+    console.log("Product creation response:", res);
+    return res;
   } catch (error) {
     console.error("Error in creating products: ", error);
   }

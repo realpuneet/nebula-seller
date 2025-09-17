@@ -27,7 +27,7 @@ router.put("/user/role", authUser, authController.updateUserRole);
 
 //seller
 router.post("/seller/register", authController.registerSeller);
-router.post("/seller/login", authController.loginSeller)
+router.post("/seller/login", authController.loginSeller);
 
 
 module.exports = router;

@@ -16,11 +16,11 @@ const App = () => {
         if (me) {
           dispatch(setUser(me?.data?.user));
         }
-      } catch (error) {
-        console.log("errro in /me route /login first");
+      } catch (err) {
+        console.log("error in /me route /login first");
       }
     })();
-  }, []);
+  }, [dispatch]);
 
   return (
     <div>

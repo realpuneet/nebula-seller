@@ -16,7 +16,7 @@ router.post(
 
 /* GET seller */
 router.get("/seller-products",authMiddleware.authSeller, productController.getSellerProducts);
-router.get("/all-products", productController.getAllProducts)
+router.get("/all-products", productController.getAllProducts);
 router.get('/product-detail/:id',productController.getProductDetails);
 
 

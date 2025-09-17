@@ -78,7 +78,7 @@ const ProductDetail = () => {
           order_id: res.data.order.order_id,
           name: "CricCart E-comm app",
           description: "Product purchasing",
-          amount: product?.price?.amount,
+          amount: product?.price?.amount * 100, // Convert rupees to paise for Razorpay
           currency: product?.price?.currency,
           handler: async (response) => {
             let dets = {
