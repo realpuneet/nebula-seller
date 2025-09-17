@@ -43,7 +43,7 @@ const RegisterForm = ({ setflag }) => {
       };
       if(isLoggedIn){
         // For logged-in users, update their role
-        const response = await axiosInstance.put("/auth/user/role", { role: data.role });
+        const response = await axiosInstance.put("/api/auth/user/role", { role: data.role });
         console.log("role updated:", response.data);
         dispatch(updateUserRole(data.role));
         toast.success("Role updated successfully! You are now a seller.");
@@ -56,7 +56,7 @@ const RegisterForm = ({ setflag }) => {
           toast.success("Seller account created successfully!");
 
         }else{
-          const response = await axiosInstance.post("/auth/user/register", newObj);
+          const response = await axiosInstance.post("/api/auth/user/register", newObj);
         console.log(response.data);
         toast.success("User account created successfully!");
         }

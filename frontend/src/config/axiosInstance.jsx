@@ -3,12 +3,12 @@ import { store } from "../store/store";
 import { setError } from "../store/features/errorSlice";
 
 export const axiosInstance = axios.create({
-    baseURL: "http://localhost:3000/api",
-    headers: {
-        "Content-Type": "application/json",
-    },
-    withCredentials: true, // This allows cookies to be sent with requests  
-})
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  withCredentials: true, // send cookies with requests
+});
 
 axios.interceptors.response.use(
     (response) => response,

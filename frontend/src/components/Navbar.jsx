@@ -24,7 +24,7 @@ const Navbar = () => {
 
   const logoutUser = async () => {
     try {
-      let res = await axiosInstance.get("/auth/user/logout");
+      let res = await axiosInstance.get("/api/auth/user/logout");
       if (res) {
         toast.success("Logged out successfully!");
         return res.data.message;

@@ -86,7 +86,7 @@ const ProductDetail = () => {
               razorpay_signature: response.razorpay_signature,
               order_id: order_id,
             };
-            let res = await axiosInstance.post("/payment/verify-payment", dets);
+            let res = await axiosInstance.post("/api/payment/verify-payment", dets);
             if (res) {
               alert("Payment Successfull");
             } else {

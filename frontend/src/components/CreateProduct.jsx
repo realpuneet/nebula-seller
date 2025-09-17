@@ -85,7 +85,7 @@ const CreateProduct = ({ onProductCreated, onCancel }) => {
         currency: "INR"
       }));
 
-      const response = await axiosInstance.post("/products/create-product", formData, {
+      const response = await axiosInstance.post("/api/products/create-product", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

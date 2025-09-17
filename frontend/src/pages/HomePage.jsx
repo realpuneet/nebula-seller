@@ -10,7 +10,7 @@ const HomePage = () => {
   const fetchAllProducts = async () => {
     try {
       setLoading(true);
-      const response = await axiosInstance.get("/products/all-products");
+      const response = await axiosInstance.get("/api/products/all-products");
       setProducts(response.data.products);
     } catch (error) {
       console.log(error);

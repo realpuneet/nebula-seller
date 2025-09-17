@@ -2,7 +2,7 @@ import { axiosInstance } from "../config/axiosInstance";
 
 export const createOrder = async (data) => {
   try {
-    let res = await axiosInstance.post("/payment/create-order", data);
+    let res = await axiosInstance.post("/api/payment/create-order", data);
     if (res) {
       return res;
     }

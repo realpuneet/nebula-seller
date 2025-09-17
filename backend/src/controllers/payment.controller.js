@@ -1,4 +1,3 @@
-const { error } = require("console");
 const paymentModel = require("../models/payment.model");
 const razorpayInstance = require("../services/payment.service");
 const crypto = require("crypto");

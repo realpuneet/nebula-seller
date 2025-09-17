@@ -44,7 +44,11 @@ const registerUser = async (req, res) => {
 
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
-  res.cookie("token", token);
+  res.cookie("token", token, {
+  httpOnly: true,
+  secure: true,       // must be true in production
+  sameSite: "None",   // required for cross-site cookies
+});
 
   res.status(201).json({
     message: "User registered successfully",
@@ -74,7 +78,11 @@ async function loginUser(req, res) {
 
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
-  res.cookie("token", token);
+ res.cookie("token", token, {
+  httpOnly: true,
+  secure: true,       // must be true in production
+  sameSite: "None",   // required for cross-site cookies
+});
 
   res.status(200).json({
     message: "user logged in successfully",
@@ -118,7 +126,11 @@ async function registerSeller(req, res) {
 
   const token = jwt.sign({ id: seller._id }, process.env.JWT_SECRET);
 
-  res.cookie("token", token);
+  res.cookie("token", token, {
+  httpOnly: true,
+  secure: true,       // must be true in production
+  sameSite: "None",   // required for cross-site cookies
+});
 
   res.status(201).json({
     message: "Seller registered successfully!",
@@ -148,7 +160,12 @@ async function loginSeller(req, res) {
   }
 
   const token = jwt.sign({ id: seller._id }, process.env.JWT_SECRET);
-  res.cookie("token", token);
+
+  res.cookie("token", token, {
+  httpOnly: true,
+  secure: true,       // must be true in production
+  sameSite: "None",   // required for cross-site cookies
+});
 
   res.status(200).json({
     msg: "Seller Logged In Successfully",

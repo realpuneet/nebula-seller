@@ -29,7 +29,7 @@ export const createProduct = async (data) => {
 
 export const fetchSellerProducts = async() => {
   try {
-      const res = await axiosInstance.get("/products/seller-products")
+      const res = await axiosInstance.get("/api/products/seller-products")
       console.log(res);
       if (res) {
         return res.data.products;

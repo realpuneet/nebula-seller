@@ -28,7 +28,7 @@ const LoginForm = ({ setflag }) => {
         password: data.password
       };
       
-      const response = await axiosInstance.post("/auth/user/login", loginData, {
+      const response = await axiosInstance.post("/api/auth/user/login", loginData, {
         withCredentials: true,
       });
       dispatch(setUser(response.data.user));
