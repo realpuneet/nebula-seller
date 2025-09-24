@@ -14,7 +14,9 @@ app.use(cookieParser());
 app.use(morgan("dev"));
 
 const allowedOrigins = [
-  "http://localhost:5173",           // local frontend // deployed frontend
+  "http://localhost:5173",   
+  "https://nebula-seller.vercel.app"
+  // local frontend // deployed frontend
 ];
 
 app.use(
