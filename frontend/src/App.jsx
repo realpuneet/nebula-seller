@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux';
 import { axiosInstance } from './config/axiosInstance';
 import { setUser } from './store/features/authSlice';
 
-
 const App = () => {
   const dispatch = useDispatch();
 
