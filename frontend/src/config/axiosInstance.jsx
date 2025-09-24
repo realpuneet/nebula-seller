@@ -3,7 +3,7 @@ import { store } from "../store/store";
 import { setError } from "../store/features/errorSlice";
 
 export const axiosInstance = axios.create({
-  baseURL: "https://criccart.vercel.app",
+  baseURL: "http://localhost:3000",
   headers: {
     "Content-Type": "application/json",
   },
